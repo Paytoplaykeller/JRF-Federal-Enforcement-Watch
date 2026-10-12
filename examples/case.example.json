@@ -1,0 +1,23 @@
+{
+  "subject": "Example Defendant",
+  "status": "indictment",
+  "charging_agency": "FBI; HHS-OIG",
+  "us_attorneys_office": "Example U.S. Attorney's Office",
+  "court": "Example District",
+  "case_number": "1:26-cr-00001",
+  "charges_statutes": "18 U.S.C. § 1347",
+  "factual_allegations_or_admissions": "Government alleges false Medicare billing. Allegations only.",
+  "victims_or_public_harm": "Medicare program and beneficiaries",
+  "trigger_or_referral": "Not publicly disclosed",
+  "cooperators_whistleblowers_competitors_political": "",
+  "warrants_subpoenas_raids": "Search warrant publicly confirmed",
+  "key_dates": "Indicted 2026-10-01",
+  "potential_sentence": "Up to 10 years if convicted, as officially stated",
+  "primary_source": "https://www.justice.gov/",
+  "reporting_source": "https://example.com/report",
+  "jrf_relevance": "Healthcare HIGH ALERT; search-warrant and charging-discretion issues",
+  "proof_posture": "allegation",
+  "healthcare": true,
+  "outreach_status": "RESEARCH",
+  "tags": ["healthcare", "search warrant", "prosecutorial discretion"]
+}
