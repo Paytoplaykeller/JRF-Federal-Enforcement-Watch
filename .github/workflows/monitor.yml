@@ -1,0 +1,43 @@
+name: Federal Enforcement Watch
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -e .[dev]
+
+      - name: Test
+        run: pytest -q
+
+      - name: Scan configured public sources
+        run: python scripts/scan_sources.py
+
+      - name: Build high-priority report
+        run: python scripts/build_report.py
+
+      - name: Upload candidate queue and report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrf-enforcement-watch
+          path: |
+            data/candidates.jsonl
+            reports/latest.md
+          if-no-files-found: warn
+
+# Email is intentionally disabled in the repository workflow.
+# The live ChatGPT automation currently handles verified alerts to Lucky.
