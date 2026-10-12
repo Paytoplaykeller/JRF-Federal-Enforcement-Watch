@@ -1,0 +1,42 @@
+sources:
+  - name: DOJ Office of Public Affairs
+    kind: page
+    url: https://www.justice.gov/opa/pr
+    link_selector: "a"
+    include_terms: [indictment, charged, complaint, guilty, sentenced, fraud, bribery, healthcare, health care, corruption]
+    max_items: 40
+
+  - name: DOJ Criminal Division
+    kind: page
+    url: https://www.justice.gov/criminal/press-releases
+    link_selector: "a"
+    include_terms: [indictment, charged, guilty, fraud, health, corruption]
+    max_items: 40
+
+  - name: HHS OIG Enforcement
+    kind: page
+    url: https://oig.hhs.gov/fraud/enforcement/
+    link_selector: "a"
+    include_terms: [fraud, charged, indictment, guilty, sentenced, settlement]
+    max_items: 40
+
+  - name: SEC Litigation Releases
+    kind: page
+    url: https://www.sec.gov/enforcement-litigation/litigation-releases
+    link_selector: "a"
+    include_terms: [litigation, fraud, complaint]
+    max_items: 30
+
+  - name: CFTC Enforcement Press Releases
+    kind: page
+    url: https://www.cftc.gov/PressRoom/PressReleases
+    link_selector: "a"
+    include_terms: [fraud, enforcement, charges, complaint]
+    max_items: 30
+
+  - name: FBI News
+    kind: page
+    url: https://www.fbi.gov/news/press-releases
+    link_selector: "a"
+    include_terms: [indicted, charged, arrest, fraud, corruption, healthcare]
+    max_items: 40
