@@ -13,6 +13,14 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    env:
+      JRF_SMTP_HOST: ${{ secrets.JRF_SMTP_HOST }}
+      JRF_SMTP_PORT: ${{ secrets.JRF_SMTP_PORT }}
+      JRF_SMTP_USER: ${{ secrets.JRF_SMTP_USER }}
+      JRF_SMTP_PASSWORD: ${{ secrets.JRF_SMTP_PASSWORD }}
+      JRF_ALERT_FROM: ${{ secrets.JRF_ALERT_FROM }}
+      JRF_ALERT_TO: ${{ secrets.JRF_ALERT_TO }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -25,6 +33,31 @@ jobs:
 
       - name: Test
         run: pytest -q
+
+      - name: Verify email-secret wiring
+        shell: bash
+        run: |
+          missing=0
+          for name in JRF_SMTP_HOST JRF_SMTP_USER JRF_SMTP_PASSWORD JRF_ALERT_FROM JRF_ALERT_TO; do
+            if [ -z "${!name}" ]; then
+              echo "::warning::Missing required GitHub Secret: $name"
+              missing=1
+            else
+              echo "$name is configured"
+            fi
+          done
+
+          if [ -z "${JRF_SMTP_PORT}" ]; then
+            echo "JRF_SMTP_PORT not set; notifier will default to 587"
+          else
+            echo "JRF_SMTP_PORT is configured"
+          fi
+
+          if [ "$missing" -eq 1 ]; then
+            echo "EMAIL_PREFLIGHT=missing" >> "$GITHUB_ENV"
+          else
+            echo "EMAIL_PREFLIGHT=ready" >> "$GITHUB_ENV"
+          fi
 
       - name: Scan configured public sources
         run: python scripts/scan_sources.py
@@ -41,5 +74,17 @@ jobs:
             reports/latest.md
           if-no-files-found: warn
 
-# Email is intentionally disabled in the repository workflow.
-# The live ChatGPT automation currently handles verified alerts to Lucky.
+      - name: Email integration status
+        run: |
+          if [ "$EMAIL_PREFLIGHT" = "ready" ]; then
+            echo "JRF email credentials are wired and available to the workflow."
+            echo "Automatic sending remains gated until a verified-case routing step is enabled."
+          else
+            echo "JRF email credentials are incomplete; review repository Actions secrets."
+          fi
+
+# Safety architecture:
+# - GitHub may use SMTP credentials only after secret preflight succeeds.
+# - Current workflow does NOT automatically email raw scraped candidates.
+# - Verified-case routing remains with the live JRF Federal Enforcement Watch until
+#   repository-level verification and Lucky-vs-Marly routing are implemented.
